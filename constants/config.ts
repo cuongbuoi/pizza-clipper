@@ -1,0 +1,1 @@
+export const MAIN_CONTENT_SCRIPT_TAG = 'PIZZA-ROOT'
