@@ -33,7 +33,7 @@ export function useSelector() {
         position: 'absolute',
         border: '2px dashed rgba(255, 165, 0, 0.7)',
         pointerEvents: 'none',
-        zIndex: '9999',
+        zIndex: '9999'
       })
     }
     toggleSelectorMode(true)
@@ -58,13 +58,14 @@ export function useSelector() {
     if (!selectorOverlay.value) {
       return
     }
-
+    const querySelector = customSelectorFunc.value ? customSelectorFunc.value(target) : getAbsoluteQuerySelector(target)
+    console.log(querySelector)
     Object.assign(selectorOverlay.value.style, {
       display: 'block',
       top: `${rect.top + window.scrollY}px`,
       left: `${rect.left + window.scrollX}px`,
       width: `${rect.width}px`,
-      height: `${rect.height}px`,
+      height: `${rect.height}px`
     })
   }
 
@@ -99,15 +100,15 @@ export function useSelector() {
 
   useEventListener(document.body, 'mousemove', onElementHover, {
     capture: true,
-    passive: false,
+    passive: false
   })
   useEventListener(document.body, 'click', onElementClick, {
     capture: true,
-    passive: false,
+    passive: false
   })
   useEventListener(window, 'keydown', onKeyPress, {
     capture: true,
-    passive: true,
+    passive: true
   })
 
   return {
@@ -123,6 +124,6 @@ export function useSelector() {
     },
     setCustomSelectorFunc: (func: (element: HTMLElement) => string) => {
       customSelectorFunc.value = func
-    },
+    }
   }
 }

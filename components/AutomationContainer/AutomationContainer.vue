@@ -22,14 +22,15 @@ const selectElement = async (index: number) => {
   setupSelectorOverlay()
 }
 
-const handleElementClick = (querySelector: string) => {
+const {
+  setupSelectorOverlay,
+  setOnElementClickCallback
+} = useSelector()
+
+setOnElementClickCallback((querySelector: string) => {
   if (currentCommandIndex.value !== null) {
     commands.value[currentCommandIndex.value].selector = querySelector
   }
-}
-
-const { setupSelectorOverlay } = useSelector({
-  onElementClickCallback: handleElementClick,
 })
 
 const toggleAutomation = (value: boolean) => {
@@ -56,7 +57,7 @@ const addCommand = async () => {
     id: uuid(),
     action: COMMAND_TYPES.CLICK,
     selector: '',
-    delay: 0,
+    delay: 0
   })
 }
 
@@ -74,7 +75,7 @@ const runAutomation = async () => {
       }
       await sleep(command.delay)
 
-      const element = document.querySelector(command.selector)
+      const element = document.querySelector(command.selector) as HTMLElement | null
       if (!element) {
         return
       }
@@ -83,7 +84,7 @@ const runAutomation = async () => {
         case COMMAND_TYPES.CLICK_ELEMENT:
           element.scrollIntoView({
             behavior: 'smooth',
-            block: 'center',
+            block: 'center'
           })
           await sleep(500)
           element.click()
@@ -95,7 +96,7 @@ const runAutomation = async () => {
           const elementHeight = element.scrollHeight
           element.scrollTo({
             top: elementHeight,
-            behavior: 'smooth',
+            behavior: 'smooth'
           })
           break
         }
@@ -106,7 +107,7 @@ const runAutomation = async () => {
           while (currentHeight === lastHeight) {
             element.scrollTo({
               top: currentHeight,
-              behavior: 'smooth',
+              behavior: 'smooth'
             })
 
             await new Promise((resolve) => {
@@ -141,11 +142,11 @@ watch(
     const url = window.location.href
     const updatedCommands = {
       ...allCommands,
-      [url]: newCommands,
+      [url]: newCommands
     }
     await storage.setItem(STORAGE_KEY.AUTOMATION, updatedCommands)
   },
-  { deep: true },
+  { deep: true }
 )
 
 onMounted(() => {
@@ -183,45 +184,45 @@ onUnmounted(() => {
       <div class="pb-3">
         <table class="w-full text-left table-fixed min-w-max">
           <thead>
-            <tr>
-              <th class="text-xs pr-3 py-1 border-b border-blue-gray-50">Action</th>
-              <th class="text-xs px-3 py-1 border-b border-blue-gray-50">Selector</th>
-              <th class="text-xs px-3 py-1 border-b border-blue-gray-50">Delay (ms)</th>
-              <th class="text-xs pl-3 py-1 border-b border-blue-gray-50">&nbsp;</th>
-            </tr>
+          <tr>
+            <th class="text-xs pr-3 py-1 border-b border-blue-gray-50">Action</th>
+            <th class="text-xs px-3 py-1 border-b border-blue-gray-50">Selector</th>
+            <th class="text-xs px-3 py-1 border-b border-blue-gray-50">Delay (ms)</th>
+            <th class="text-xs pl-3 py-1 border-b border-blue-gray-50">&nbsp;</th>
+          </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in commands" :key="item.id">
-              <td class="text-xs pr-3 py-1 border-b border-blue-gray-50">
-                <select v-model="item.action" class="border border-solid border-gray-300 rounded px-2 py-1" name="type">
-                  <option v-for="(option, key) in COMMAND_TYPES" :key="key" :value="option">
-                    {{ option }}
-                  </option>
-                </select>
-              </td>
-              <td class="text-xs px-3 py-1 border-b border-blue-gray-50">
-                <div class="flex items-center gap-1 border border-solid border-gray-300 rounded overflow-hidden">
-                  <input v-model="item.selector" class="px-2 py-1 flex-grow w-full" type="text">
-                  <button class="flex-shrink-0 w-[20px]" @click="selectElement(index)">
-                    <CursorArrowRippleIcon class="size-4" />
-                  </button>
-                </div>
-              </td>
-              <td class="text-xs px-3 py-1 border-b border-blue-gray-50">
-                <input
-                  v-model="item.delay"
-                  class="border border-solid border-gray-300 rounded px-2 py-1"
-                  min="0"
-                  step="100"
-                  type="number"
-                >
-              </td>
-              <td class="text-xs pl-3 py-1 border-b border-blue-gray-50 text-right">
-                <button class="text-red-500" @click="removeCommand(index)">
-                  <TrashIcon class="size-4" />
+          <tr v-for="(item, index) in commands" :key="item.id">
+            <td class="text-xs pr-3 py-1 border-b border-blue-gray-50">
+              <select v-model="item.action" class="border border-solid border-gray-300 rounded px-2 py-1" name="type">
+                <option v-for="(option, key) in COMMAND_TYPES" :key="key" :value="option">
+                  {{ option }}
+                </option>
+              </select>
+            </td>
+            <td class="text-xs px-3 py-1 border-b border-blue-gray-50">
+              <div class="flex items-center gap-1 border border-solid border-gray-300 rounded overflow-hidden">
+                <input v-model="item.selector" class="px-2 py-1 flex-grow w-full" type="text">
+                <button class="flex-shrink-0 w-[20px]" @click="selectElement(index)">
+                  <CursorArrowRippleIcon class="size-4" />
                 </button>
-              </td>
-            </tr>
+              </div>
+            </td>
+            <td class="text-xs px-3 py-1 border-b border-blue-gray-50">
+              <input
+                v-model="item.delay"
+                class="border border-solid border-gray-300 rounded px-2 py-1"
+                min="0"
+                step="100"
+                type="number"
+              >
+            </td>
+            <td class="text-xs pl-3 py-1 border-b border-blue-gray-50 text-right">
+              <button class="text-red-500" @click="removeCommand(index)">
+                <TrashIcon class="size-4" />
+              </button>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>

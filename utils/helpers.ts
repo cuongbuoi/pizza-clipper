@@ -86,11 +86,11 @@ export const exportCsvFile = <T>(data: T[]) => {
     return
   }
 
-  const csvHeaders = Object.keys(data[0])
-  const rows = data.map((item) => Object.values(item))
+  const csvHeaders = Object.keys(data[0] as Record<string, string>)
+  const rows = data.map((item) => Object.values(item as Record<string, string>))
   const csvContent = [
     csvHeaders,
-    ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
+    ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
   ].join('\n')
 
   const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`)

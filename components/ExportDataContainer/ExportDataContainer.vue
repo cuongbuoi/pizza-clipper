@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import Badge from '@/components/Badge/Badge.vue'
 import { useSelector } from '@/composables/useSelector'
 import { EVENTS } from '@/constants/event'
 import { EXPORT_DATA_TYPES } from '@/constants/export-data'
@@ -86,6 +87,7 @@ const selectChild = async (index: number) => {
 
 const exportCsv = () => {
   if (!container.value) {
+    alert('Please select container')
     return
   }
 
@@ -112,7 +114,6 @@ const exportCsv = () => {
       data = [getData(containerEl)]
     }
   }
-  console.log(data)
   exportCsvFile<ExportDataCsv>(data)
 }
 
@@ -172,6 +173,10 @@ onUnmounted(() => {
       </div>
       <div class="mb-3">
         <div class="text-lg font-bold">Select elements to export data</div>
+        <div>
+          Current presets:
+          <Badge>Temu</Badge>
+        </div>
       </div>
       <div class="pb-3">
         <div class="mb-2">
@@ -179,7 +184,7 @@ onUnmounted(() => {
             <div class="font-semibold">Select container</div>
             <label class="flex items-center gap-1" for="loop">
               <input id="loop" v-model="loop" class="cursor-pointer" type="checkbox">
-              <span class="text-xs">Loop</span>
+              <span class="text-xs">Repeat</span>
             </label>
           </div>
           <div class="flex items-center gap-1 border border-solid border-gray-300 rounded overflow-hidden">
