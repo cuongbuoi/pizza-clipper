@@ -5,8 +5,8 @@ export default defineConfig({
   extensionApi: 'chrome',
   modules: ['@wxt-dev/module-vue'],
   manifest: {
-    name: 'Pizza clipper',
+    name: 'Pizza Clipper',
     permissions: ['storage', 'tabs', 'scripting'],
-    host_permissions: ['<all_urls>'],
-  },
+    host_permissions: ['<all_urls>']
+  }
 })
