@@ -19,3 +19,15 @@ export interface ExportData {
 export type ExportDataCsv = Record<string, string>;
 
 export type StorageExportData = Record<string, ExportData>
+
+export const enum EXPORT_DATA_FORM_FIELD {
+  CONTAINER = 'container',
+  LOOP = 'loop',
+  CHILDREN = 'children',
+}
+
+export interface ExportDataForm {
+  [EXPORT_DATA_FORM_FIELD.CONTAINER]: string
+  [EXPORT_DATA_FORM_FIELD.LOOP]: boolean
+  [EXPORT_DATA_FORM_FIELD.CHILDREN]: ExportDataChild[]
+}

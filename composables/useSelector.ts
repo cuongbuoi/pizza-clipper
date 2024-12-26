@@ -58,8 +58,7 @@ export function useSelector() {
     if (!selectorOverlay.value) {
       return
     }
-    const querySelector = customSelectorFunc.value ? customSelectorFunc.value(target) : getAbsoluteQuerySelector(target)
-    console.log(querySelector)
+    
     Object.assign(selectorOverlay.value.style, {
       display: 'block',
       top: `${rect.top + window.scrollY}px`,

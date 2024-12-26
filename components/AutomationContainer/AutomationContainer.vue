@@ -100,34 +100,34 @@ const runAutomation = async () => {
           })
           break
         }
-        case COMMAND_TYPES.SCROLL_UNTIL_END: {
-          let lastHeight = element.scrollHeight
-          let currentHeight = lastHeight
-
-          while (currentHeight === lastHeight) {
-            element.scrollTo({
-              top: currentHeight,
-              behavior: 'smooth'
-            })
-
-            await new Promise((resolve) => {
-              const checkHeightChange = setInterval(() => {
-                currentHeight = element.scrollHeight
-                if (currentHeight !== lastHeight) {
-                  lastHeight = currentHeight
-                  clearInterval(checkHeightChange)
-                  resolve(null)
-                }
-              }, 500)
-            })
-
-            if (currentHeight === lastHeight) {
-              console.log('No new content loaded, stopping scroll.')
-              break
-            }
-          }
-          break
-        }
+        // case COMMAND_TYPES.SCROLL_UNTIL_END: {
+        //   let lastHeight = element.scrollHeight
+        //   let currentHeight = lastHeight
+        //
+        //   while (currentHeight === lastHeight) {
+        //     element.scrollTo({
+        //       top: currentHeight,
+        //       behavior: 'smooth'
+        //     })
+        //
+        //     await new Promise((resolve) => {
+        //       const checkHeightChange = setInterval(() => {
+        //         currentHeight = element.scrollHeight
+        //         if (currentHeight !== lastHeight) {
+        //           lastHeight = currentHeight
+        //           clearInterval(checkHeightChange)
+        //           resolve(null)
+        //         }
+        //       }, 500)
+        //     })
+        //
+        //     if (currentHeight === lastHeight) {
+        //       console.log('No new content loaded, stopping scroll.')
+        //       break
+        //     }
+        //   }
+        //   break
+        // }
       }
     }
   } catch (error) {
@@ -161,10 +161,10 @@ onUnmounted(() => {
 
 <template>
   <div v-if="automationMode" class="fixed top-6 right-6 z-[9999999999]">
-    <div class="relative p-2 pb-[42px] rounded bg-white w-[500px] shadow">
+    <div class="relative p-3 pb-[42px] rounded bg-white w-[500px] shadow">
       <div class="flex justify-end mb-3">
         <button
-          class="flex items-center justify-center text-gray-600 w-[20px] h-[20px] p-0"
+          class="flex items-center justify-center text-gray-600 w-[16px] h-[16px] p-0"
           @click="toggleAutomation(false)"
         >
           <XMarkIcon class="size-4" />
@@ -185,22 +185,23 @@ onUnmounted(() => {
         <table class="w-full text-left table-fixed min-w-max">
           <thead>
           <tr>
-            <th class="text-xs pr-3 py-1 border-b border-blue-gray-50">Action</th>
-            <th class="text-xs px-3 py-1 border-b border-blue-gray-50">Selector</th>
-            <th class="text-xs px-3 py-1 border-b border-blue-gray-50">Delay (ms)</th>
-            <th class="text-xs pl-3 py-1 border-b border-blue-gray-50">&nbsp;</th>
+            <th class="text-xs pr-1 py-1 border-b border-blue-gray-50">Action</th>
+            <th class="text-xs px-1 py-1 border-b border-blue-gray-50">Selector</th>
+            <th class="text-xs px-1 py-1 border-b border-blue-gray-50">Delay (ms)</th>
+            <th class="text-xs pl-1 py-1 border-b border-blue-gray-50 w-[20px]">&nbsp;</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(item, index) in commands" :key="item.id">
-            <td class="text-xs pr-3 py-1 border-b border-blue-gray-50">
-              <select v-model="item.action" class="border border-solid border-gray-300 rounded px-2 py-1" name="type">
+            <td class="text-xs pr-1 py-1 border-b border-blue-gray-50">
+              <select v-model="item.action" class="border border-solid border-gray-300 rounded px-2 py-1 w-full"
+                      name="type">
                 <option v-for="(option, key) in COMMAND_TYPES" :key="key" :value="option">
                   {{ option }}
                 </option>
               </select>
             </td>
-            <td class="text-xs px-3 py-1 border-b border-blue-gray-50">
+            <td class="text-xs px-1 py-1 border-b border-blue-gray-50">
               <div class="flex items-center gap-1 border border-solid border-gray-300 rounded overflow-hidden">
                 <input v-model="item.selector" class="px-2 py-1 flex-grow w-full" type="text">
                 <button class="flex-shrink-0 w-[20px]" @click="selectElement(index)">
@@ -208,16 +209,16 @@ onUnmounted(() => {
                 </button>
               </div>
             </td>
-            <td class="text-xs px-3 py-1 border-b border-blue-gray-50">
+            <td class="text-xs px-1 py-1 border-b border-blue-gray-50">
               <input
                 v-model="item.delay"
-                class="border border-solid border-gray-300 rounded px-2 py-1"
+                class="border border-solid border-gray-300 rounded px-2 py-1 w-full"
                 min="0"
                 step="100"
                 type="number"
               >
             </td>
-            <td class="text-xs pl-3 py-1 border-b border-blue-gray-50 text-right">
+            <td class="text-xs pl-1 py-1 border-b border-blue-gray-50 text-right w-[20px]">
               <button class="text-red-500" @click="removeCommand(index)">
                 <TrashIcon class="size-4" />
               </button>
@@ -226,7 +227,7 @@ onUnmounted(() => {
           </tbody>
         </table>
       </div>
-      <div class="absolute left-0 right-0 bottom-0 z-[99] flex items-center gap-2 bg-white p-2">
+      <div class="absolute left-0 right-0 bottom-0 z-[99] flex items-center gap-2 bg-white p-3">
         <button
           :disabled="!commands.length"
           class="flex flex-grow items-center justify-center text-white text-xs rounded-full bg-green-600 hover:bg-green-500 transition px-2 py-1 text-nowrap cursor-pointer disabled:bg-gray-400 disabled:cursor-default disabled:opacity-85"
